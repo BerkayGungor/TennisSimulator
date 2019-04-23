@@ -46,7 +46,7 @@ namespace TennisSimulator.Scripts.Core.TournamentData
         public Match(Player firstPlayer, List<Player> opponents)
         {
             _firstPlayer = firstPlayer;
-            _opponents = opponents;
+            _opponents = new List<Player>(opponents);
         }
 
         public void PlayMatch(string surface, string type)
@@ -56,7 +56,7 @@ namespace TennisSimulator.Scripts.Core.TournamentData
             float firstPlayerPoint = CalculatePlayerPoint(_firstPlayer, _secondPlayer, surface);
             float secondPlayerPoint = CalculatePlayerPoint(_secondPlayer, _firstPlayer, surface);
 
-            float firstPlayerWinningChance = firstPlayerPoint / firstPlayerPoint + secondPlayerPoint;
+            float firstPlayerWinningChance = firstPlayerPoint / (firstPlayerPoint + secondPlayerPoint);
             double n = random.NextDouble();
             if (type == "elimination" || type == "eleme")
             {
@@ -121,6 +121,14 @@ namespace TennisSimulator.Scripts.Core.TournamentData
         public Player GetWinner()
         {
             return _firstPlayer.IsWinner ? _firstPlayer : _secondPlayer;
+        }
+
+        public void PlayMatch(Player opponent, string surface, string type)
+        {
+            _secondPlayer = opponent;
+            PlayMatch(surface, type);
+            _opponents.Remove(opponent);
+            _secondPlayer = null;
         }
     }
 }

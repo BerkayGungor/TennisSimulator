@@ -142,12 +142,14 @@ namespace TennisSimulator.Scripts.Core.TournamentData
             System.Random random = new System.Random();
 
             int randomMatch = random.Next(0, matches.Count);
-            Match currentMatch = matches[randomMatch];
+            Match match = matches[randomMatch];
 
-            List<Player> opponents = currentMatch.GetOpponents();
+            List<Player> opponents = match.GetOpponents();
+
             int randomOpponent = random.Next(0, opponents.Count);
             Player opponent = opponents[randomOpponent];
-            opponent;
+
+            match.PlayMatch(opponent, _surface, _type);
         }
     }
 }
