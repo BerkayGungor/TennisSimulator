@@ -15,6 +15,7 @@
         private Skills _skills;
         #endregion
         private bool isWinner;
+        private int _initialExp;
         #endregion        
 
         /// <summary>
@@ -36,7 +37,9 @@
             _experience = experience;
             _hand = hand;
             _skills = skills;
+
             isWinner = false;
+            _initialExp = experience;
         }
 
         public int Id { get => _id; private set { } }
@@ -45,6 +48,7 @@
         public Skills SurfaceSkills { get => _skills; private set { } }
 
         public bool IsWinner { get => isWinner; set => isWinner = value; }
+        public int InitialExp { get => _initialExp; private set { } }
 
         /// <summary>
         /// Checks if hand value is either "left", "right", "sol", "sağ" value.

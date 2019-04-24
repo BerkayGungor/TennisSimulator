@@ -31,19 +31,40 @@ namespace TennisSimulator.Scripts.Mechanics
         {
             using (StreamReader streamReader = new StreamReader(fileName))
             {
-                string json = streamReader.ReadToEnd();
-                if (json != null && json != "")
+                string jsonData = streamReader.ReadToEnd();
+                if (jsonData != null && jsonData != "")
                 {
                     try
                     {
-                        JsonInput input = JsonConvert.DeserializeObject<JsonInput>(json);
+                        JsonInput input = JsonConvert.DeserializeObject<JsonInput>(jsonData);
                         if (input != null)
                         {
                             if (input.Players.Count > 0 && input.Tournaments.Count > 0)
                             {
                                 if (input.Players.Count % 2 == 0)
                                 {
-                                    TournamentManager tournamentManager = new TournamentManager(input.Tournaments, input.Players);
+                                    TournamentManager tournamentManager = new TournamentManager();
+                                    JsonOutput output = tournamentManager.ManageAndPlayTournaments(
+                                        input.Tournaments,
+                                        input.Players
+                                    );
+
+                                    SaveFileDialog saveJsonDialog = new SaveFileDialog
+                                    {
+                                        FileName = "output.json",
+                                        Filter = "JSON File|*.json",
+                                        Title = "Save Output"
+                                    };
+                                    saveJsonDialog.ShowDialog();
+
+                                    if (saveJsonDialog.FileName != "" && saveJsonDialog.FileName.Trim() != "")
+                                    {
+                                        using (StreamWriter file = File.CreateText(saveJsonDialog.FileName))
+                                        {
+                                            JsonSerializer serializer = new JsonSerializer();
+                                            serializer.Serialize(file, output);
+                                        }
+                                    }
                                 }
                                 else
                                 {

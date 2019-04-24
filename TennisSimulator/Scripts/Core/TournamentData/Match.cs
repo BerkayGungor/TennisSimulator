@@ -57,18 +57,19 @@ namespace TennisSimulator.Scripts.Core.TournamentData
             float secondPlayerPoint = CalculatePlayerPoint(_secondPlayer, _firstPlayer, surface);
 
             float firstPlayerWinningChance = firstPlayerPoint / (firstPlayerPoint + secondPlayerPoint);
-            double n = random.NextDouble();
+            float secondPlayerWinningChance = secondPlayerPoint / (firstPlayerPoint + secondPlayerPoint);
+
             if (type == "elimination" || type == "eleme")
             {
                 // First Player Wins
-                if (n < firstPlayerWinningChance)
+                if (secondPlayerWinningChance < firstPlayerWinningChance)
                 {
                     _firstPlayer.IsWinner = true;
                     _firstPlayer.FinishMatch(ELIMINATION_WIN_EXP);
                     _secondPlayer.IsWinner = false;
                     _secondPlayer.FinishMatch(ELIMINATION_LOSE_EXP);
                 }
-                // Second Player Wins
+                // Second Player Wins. Even if both of them have equal chance.
                 else
                 {
                     _secondPlayer.IsWinner = true;
@@ -80,7 +81,7 @@ namespace TennisSimulator.Scripts.Core.TournamentData
             else
             {
                 // First Player Wins
-                if (n < firstPlayerWinningChance)
+                if (secondPlayerWinningChance < firstPlayerWinningChance)
                 {
                     _firstPlayer.IsWinner = true;
                     _firstPlayer.FinishMatch(LEAGUE_WIN_EXP);
@@ -123,12 +124,14 @@ namespace TennisSimulator.Scripts.Core.TournamentData
             return _firstPlayer.IsWinner ? _firstPlayer : _secondPlayer;
         }
 
-        public void PlayMatch(Player opponent, string surface, string type)
+        public bool PlayMatch(Player opponent, string surface, string type)
         {
             _secondPlayer = opponent;
             PlayMatch(surface, type);
             _opponents.Remove(opponent);
             _secondPlayer = null;
+
+            return _opponents.Count <= 0;
         }
     }
 }

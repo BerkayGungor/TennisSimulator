@@ -94,9 +94,12 @@ namespace TennisSimulator.Scripts.Core.TournamentData
 
         private void PairEliminationPlayers(List<Player> players)
         {
-            for (int i = 0; i < players.Count; i = i + 2)
+            if (players.Count > 2)
             {
-                _matches.Add(new Match(players[i], players[i + 1]));
+                for (int i = 0; i < players.Count; i = i + 2)
+                {
+                    _matches.Add(new Match(players[i], players[i + 1]));
+                }
             }
         }
 
@@ -123,33 +126,54 @@ namespace TennisSimulator.Scripts.Core.TournamentData
 
         private void PlayEliminationMatches(List<Match> matches)
         {
-            List<Player> players = new List<Player>();
-
-            foreach (Match match in matches)
+            if (matches.Count > 0)
             {
-                match.PlayMatch(_surface, _type);
-                Player winner = match.GetWinner();
-                players.Add(winner);
-                winner.IsWinner = false;
+                List<Player> players = new List<Player>();
+
+                foreach (Match match in matches)
+                {
+                    match.PlayMatch(_surface, _type);
+                    Player winner = match.GetWinner();
+                    players.Add(winner);
+                    winner.IsWinner = false;
+                }
+                matches.Clear();
+                PairEliminationPlayers(players);
+                PlayEliminationMatches(_matches);
             }
-            matches.Clear();
-            PairEliminationPlayers(players);
-            PlayEliminationMatches(_matches);
         }
 
         private void PlayLeagueMatches(List<Match> matches)
         {
-            System.Random random = new System.Random();
+            if (matches.Count > 0)
+            {
+                System.Random random = new System.Random();
 
-            int randomMatch = random.Next(0, matches.Count);
-            Match match = matches[randomMatch];
+                int randomMatchIndex = random.Next(0, matches.Count);
+                Match randomMatch = matches[randomMatchIndex];
 
-            List<Player> opponents = match.GetOpponents();
+                List<Player> opponents = randomMatch.GetOpponents();
 
-            int randomOpponent = random.Next(0, opponents.Count);
-            Player opponent = opponents[randomOpponent];
+                // Check if there exist any valid opponent.
+                if (opponents.Count <= 0)
+                {
+                    matches.RemoveAt(randomMatchIndex);
+                    PlayLeagueMatches(matches);
+                }
+                else
+                {
+                    int randomOpponent = random.Next(0, opponents.Count);
+                    Player opponent = opponents[randomOpponent];
 
-            match.PlayMatch(opponent, _surface, _type);
+                    // Check if there exist any other valid opponent after playing match
+                    if (randomMatch.PlayMatch(opponent, _surface, _type))
+                    {
+                        matches.RemoveAt(randomMatchIndex);
+                    }
+
+                    PlayLeagueMatches(matches);
+                }
+            }
         }
     }
 }
