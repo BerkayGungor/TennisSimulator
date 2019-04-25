@@ -7,6 +7,8 @@ Form project written in c#
 
 ### Installing Application And Starting.
 
+Open releases download TennisSimulatorInstaller.msi
+
 Double Click on TennisSimulatorInstaller.msi
 Select installation location when prompted.
 Click next button and await installation to end.
