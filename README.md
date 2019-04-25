@@ -14,7 +14,7 @@ You might be prompted to give administrative rights to installer select yes.
 Once installation finishes go to installation folder.
 Double click on TennisSimulator.exe.
 
-[!Screen](screen1.PNG)
+![Screen](screen1.PNG)
 
 You will see the screen on the above image.
 Select Open Json And Start Simulation button.
