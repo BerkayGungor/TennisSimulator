@@ -94,7 +94,7 @@ namespace TennisSimulator.Scripts.Core.TournamentData
 
         private void PairEliminationPlayers(List<Player> players)
         {
-            if (players.Count > 2)
+            if (players.Count > 1)
             {
                 for (int i = 0; i < players.Count; i = i + 2)
                 {
@@ -105,7 +105,7 @@ namespace TennisSimulator.Scripts.Core.TournamentData
 
         private void PairLeaguePlayers(List<Player> players)
         {
-            for (int i = 0; i < players.Count; i++)
+            for (int i = 0; i < players.Count - 1; i++)
             {
                 int nextIndex = i + 1;
                 _matches.Add(new Match(players[i], players.GetRange(nextIndex, players.Count - nextIndex)));

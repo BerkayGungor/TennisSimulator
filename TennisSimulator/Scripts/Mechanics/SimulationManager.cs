@@ -62,6 +62,7 @@ namespace TennisSimulator.Scripts.Mechanics
                                         using (StreamWriter file = File.CreateText(saveJsonDialog.FileName))
                                         {
                                             JsonSerializer serializer = new JsonSerializer();
+                                            serializer.Formatting = Formatting.Indented;
                                             serializer.Serialize(file, output);
                                         }
                                     }
