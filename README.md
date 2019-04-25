@@ -30,7 +30,7 @@ Select save location click ok.
 Double click on TennisSimulator.sln
 Then select Run button from toolbar.
 
-[!Screen](screen1.PNG)
+![Screen](screen1.PNG)
 
 You will see the screen on the above image.
 Select Open Json And Start Simulation button.
